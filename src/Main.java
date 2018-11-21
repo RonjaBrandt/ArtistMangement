@@ -15,10 +15,11 @@ public class Main {
         ArtistDAO dao = new ArtistDAOImpalement();
         Artist a1 = new Artist("Jennie","Holm",33);
 
-        dao.create(a1);
-        //dao.findAll();
-        dao.findByName();
-
+        //dao.create(a1);
+        dao.findAll();
+        //dao.findByName();
+        dao.deleteArtist(1);
+        dao.findAll();
 
 
 

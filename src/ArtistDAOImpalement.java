@@ -22,11 +22,13 @@ public class ArtistDAOImpalement implements ArtistDAO  {
 
     public ArtistDAOImpalement() throws SQLException {
         connection = DriverManager.getConnection(url, user, password);
+        System.out.println("Connection successes");
         insert = connection.prepareStatement("insert into artistinfo(name, lastName, age) values (?,?,?)");
-        findById = connection.prepareStatement("SELECT * from artistinfo where id like ?");
+        findById = connection.prepareStatement("SELECT * from artistinfo where id=?");
         findByNamn = connection.prepareStatement("SELECT * from artistinfo WHERE name like ?");
-        update = connection.prepareStatement("UPDATE artistinfo set name =?");
-        artists=new ArrayList<>();
+        update = connection.prepareStatement("UPDATE artistinfo set name =?, lastName = ?, age = ? where id = ?");
+        delete = connection.prepareStatement("delete from artistinfo where id =?");
+
     }
 
 
@@ -48,7 +50,7 @@ public class ArtistDAOImpalement implements ArtistDAO  {
             statement = connection.createStatement();
             rs =statement.executeQuery("Select * from artistinfo");
             System.out.println("Table [ArtistInfo]");
-            List<Artist> temp = new ArrayList<>();
+
             while (rs.next()){
                 System.out.println("[ID: "+rs.getString("id")+ " Name: "+rs.getString("name") + " LastName: " +
                         rs.getString("lastName") + " Age: "+ rs.getInt("age")
@@ -62,19 +64,19 @@ public class ArtistDAOImpalement implements ArtistDAO  {
     }
 
     @Override@SuppressWarnings("Duplicates")
-    public void findById() {
-        System.out.print("Type what ID you want to search from: ");
-        int id1 = Integer.parseInt(sc.nextLine());
-      try{
-          findById.setString(1,"%"+id1+"%");
-          rs = findById.executeQuery();
-          while (rs.next()){
-              System.out.println("[ID: "+rs.getString("id")+" Name: "+rs.getString("name")
-                      + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age"));
-          }
-      }catch (SQLException exp){
-          System.out.println(exp);
-      }
+    public void findById(int id) {
+
+        int id1 = id;
+        try{
+            findById.setInt(1,id1);
+            rs = findById.executeQuery();
+            while (rs.next()){
+                System.out.println("[ID: "+rs.getString("id")+" Name: "+rs.getString("name")
+                        + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age"));
+            }
+        }catch (SQLException exp){
+            System.out.println(exp);
+        }
     }
 
     @Override@SuppressWarnings("Duplicates")
@@ -82,11 +84,11 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         System.out.print("Type what name you want to search from: ");
         String name= sc.nextLine();
         try{
-               findByNamn.setString(1,"%"+name+"%");
-               rs =findByNamn.executeQuery();
+            findByNamn.setString(1,name);
+            rs =findByNamn.executeQuery();
             while (rs.next()){
-                    System.out.println("[ID: "+rs.getString("id")+ " Name: "+rs.getString("name")
-                            + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age"));
+                System.out.println("[ID: "+rs.getString("id")+ " Name: "+rs.getString("name")
+                        + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age"));
             }
         }catch (SQLException ex) {
             System.out.println(ex);
@@ -95,13 +97,38 @@ public class ArtistDAOImpalement implements ArtistDAO  {
 
 
     @Override
-    public boolean updateArtist(Artist artist) {
-        return false;
+    public void updateArtist(int id) {
+
+        System.out.print("Enter new name: ");
+        String updateName = sc.nextLine();
+        System.out.print("Enter new last name: ");
+        String updateLastName = sc.nextLine();
+        System.out.println("Enter new age: ");
+        int updateAge = sc.nextInt();
+        try{
+
+            update.setString(1,updateName);
+            update.setString(2,updateLastName);
+            update.setInt(3,updateAge);
+            update.setInt(4,id);
+            update.executeUpdate();
+
+            System.out.println("The person with the ID "+id+" have been updated to ");
+            findById(id);
+
+        }catch (SQLException ex2){
+            System.out.println(ex2);
+        }
     }
 
     @Override
-    public boolean deleteArtist(Artist artist) {
-        return false;
+    public void deleteArtist(int id) {
+        try{
+            delete.setInt(1,id);
+            delete.execute();
+            System.out.println("The person with the id "+id+" have been deleted from the database.");
+        }catch (SQLException ex3){
+            System.out.println(ex3);
+        }
     }
-
 }

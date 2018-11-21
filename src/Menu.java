@@ -34,17 +34,13 @@ public class Menu {
             switch (choice) {
 
                 case "1":  // add
-                    System.out.println("Insert first name");
+                    System.out.print("Insert first name: ");
                     name = sc.nextLine();
+                    System.out.print("Insert last name: ");
                     lastNamn =sc.nextLine();
                     age=sc.nextInt();
                     sc.next();
                     Artist a = new Artist(name,lastNamn,age);
-
-
-
-
-
                     break;
 
                 case "2": // delete

@@ -8,9 +8,9 @@ import java.util.List;
 public interface ArtistDAO {
     void create (Artist artist);
     void findAll();
-    void findById();
+    void findById(int id);
     void findByName() throws SQLException, IOException;
-    boolean updateArtist(Artist artist);
-    boolean deleteArtist(Artist artist);
+    void updateArtist(int id);
+    void deleteArtist(int id);
 
 }
