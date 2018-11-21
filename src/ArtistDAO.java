@@ -10,6 +10,7 @@ public interface ArtistDAO {
     void findAll() throws IOException, SQLException;
     void findById(int id) throws IOException, SQLException;
     void findByName(String name) throws SQLException, IOException;
+    void findByAge(int age) throws SQLException, IOException;
     void updateArtist(int id) throws IOException, SQLException;
     void deleteArtist(int id) throws IOException, SQLException;
 

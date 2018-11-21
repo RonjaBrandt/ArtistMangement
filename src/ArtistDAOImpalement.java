@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,21 +11,26 @@ public class ArtistDAOImpalement implements ArtistDAO  {
     static Scanner sc = new Scanner(System.in);
     private String url="jdbc:mysql://localhost:3306/artists?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private String user="root";
-    private String password=sc.nextLine();
+
+    private String password;;
     private Connection connection;
-    private List<Artist> artists;
     private Statement statement;
     private ResultSet rs;
-    private PreparedStatement insert, findById, findByNamn, update, delete;
+    private PreparedStatement insert, findById, findByName, findByAge, update, delete;
 
 
 
     public ArtistDAOImpalement() throws SQLException {
+        System.out.print("Trying to connect to Server." +
+                "\nPassword: ");
+        password=sc.nextLine();
         connection = DriverManager.getConnection(url, user, password);
         System.out.println("Connection successes");
+        System.out.println("-----------------------");
         insert = connection.prepareStatement("insert into artistinfo(name, lastName, age) values (?,?,?)");
         findById = connection.prepareStatement("SELECT * from artistinfo where id=?");
-        findByNamn = connection.prepareStatement("SELECT * from artistinfo WHERE name like ?");
+        findByName = connection.prepareStatement("SELECT * from artistinfo WHERE name like ?");
+        findByAge = connection.prepareStatement("SELECT * from artistinfo WHERE age =?");
         update = connection.prepareStatement("UPDATE artistinfo set name =?, lastName = ?, age = ? where id = ?");
         delete = connection.prepareStatement("delete from artistinfo where id =?");
 
@@ -43,7 +47,9 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException ex){
             System.out.println(ex);
         }
-        Menu.menu();
+        System.out.println("Returning to main menu"
+                +"\n------------------------------");
+       Menu.menu();
     }
 
     @Override
@@ -60,6 +66,8 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+        System.out.println("Returning to main menu"
+                +"\n------------------------------");
         Menu.menu();
     }
 
@@ -68,6 +76,7 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         try{
             findById.setInt(1,id);
             rs = findById.executeQuery();
+            System.out.println("This person was found:");
             while (rs.next()){
                 System.out.println("[ID: "+rs.getString("id")+" Name: "+rs.getString("name")
                         + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age"));
@@ -75,14 +84,17 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException exp){
             System.out.println(exp);
         }
+        System.out.println("Returning to main menu"
+                +"\n------------------------------");
         Menu.menu();
     }
 
     @Override@SuppressWarnings("Duplicates")
     public void findByName(String name) throws IOException, SQLException {
         try{
-            findByNamn.setString(1,name);
-            rs =findByNamn.executeQuery();
+            findByName.setString(1,name);
+            rs = findByName.executeQuery();
+            System.out.println("This person was found:");
             while (rs.next()){
                 System.out.println("[ID: "+rs.getString("id")+ " Name: "+rs.getString("name")
                         + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age")+"]");
@@ -90,8 +102,29 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException ex) {
             System.out.println(ex);
         }
+        System.out.println("Returning to main menu"
+                +"\n------------------------------");
         Menu.menu();
     }
+
+    @Override@SuppressWarnings("Duplicates")
+    public void findByAge(int age) throws IOException, SQLException {
+        try {
+            findByAge.setInt(1, age);
+            rs = findByAge.executeQuery();
+            System.out.println("This person was found:");
+            while (rs.next()) {
+                System.out.println("[ID: " + rs.getString("id") + " Name: " + rs.getString("name")
+                        + " LastName: " + rs.getString("lastName") + " Age: " + rs.getInt("age"));
+            }
+        } catch (SQLException exp) {
+            System.out.println(exp);
+        }
+        System.out.println("Returning to main menu"
+                +"\n------------------------------");
+        Menu.menu();
+    }
+
     @Override
     public void updateArtist(int id) throws IOException, SQLException {
 
@@ -115,6 +148,8 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException | IOException ex2){
             System.out.println(ex2);
         }
+        System.out.println("Returning to main menu"
+                +"\n------------------------------");
         Menu.menu();
     }
 
@@ -127,6 +162,8 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException ex3){
             System.out.println(ex3);
         }
+        System.out.println("Returning to main menu"
+                    +"\n------------------------------");
         Menu.menu();
     }
 }

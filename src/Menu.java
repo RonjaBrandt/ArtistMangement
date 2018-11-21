@@ -21,8 +21,9 @@ public class Menu {
                 + "[2] Show all artists.\n"
                 + "[3] Find an artist by ID.\n"
                 + "[4] Find an artist by Name\n"
-                + "[5] Update an artist.\n"
-                + "[6] Delete an artist.\n"
+                + "[5] Find an artist by Age\n"
+                + "[6] Update an artist.\n"
+                + "[7] Delete an artist.\n"
                 + "[0] Exit application. ");
 
 
@@ -36,6 +37,7 @@ public class Menu {
                     String name = sc.nextLine();
                     System.out.print("Insert last name: ");
                     String lastNamn =sc.nextLine();
+                    System.out.println("Insert age");
                     int age=sc.nextInt();
                     sc.nextLine();
                     Artist artist = new Artist(name,lastNamn,age);
@@ -54,19 +56,25 @@ public class Menu {
                     break;
 
                 case "4": // Find by Name
-                    System.out.print("Type what name you want to search for: ");
+                    System.out.print("Type the name of the artist you want to search for: ");
                     String nameSearch =sc.nextLine();
                     dao.findByName(nameSearch);
                     break;
 
-                case "5": // Update
-                    System.out.print("Type what ID of the Artist you want to update: ");
+                case "5":// Find by Age
+                    System.out.print("Type the age of the artist you want to search for: ");
+                    int ageSearch = sc.nextInt();
+                    sc.nextLine();
+                    dao.findByAge(ageSearch);
+                    break;
+                case "6": // Update
+                    System.out.print("Type the ID of the artist you want to update: ");
                     int idUpdate =sc.nextInt();
                     sc.nextLine();
                     dao.updateArtist(idUpdate);
                     break;
 
-                case "6": // Delete.
+                case "7": // Delete.
                     System.out.print("Type what ID of the Artist you want to DELETE: ");
                     int idDelete =sc.nextInt();
                     sc.nextLine();
