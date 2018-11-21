@@ -4,6 +4,7 @@
 
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -11,75 +12,76 @@ public class Menu {
 
     static Scanner sc = new Scanner(System.in);
 
-    public static void menu() throws SQLException {
+    public static void menu() throws SQLException, IOException {
+
+        ArtistDAO dao = new ArtistDAOImpalement();
         System.out.println("Hello and welcome the artist management application.\n"
                 + "What would you like to do?\n"
                 + "[1] Add an artist.\n"
-                + "[2] Delete an artist.\n"
-                + "[3] Update an artist.\n"
-                + "[4] Show all artists.\n"
-                + "[5] Find an artist by ID."
-                + "[6] Exit application. ");
+                + "[2] Show all artists.\n"
+                + "[3] Find an artist by ID.\n"
+                + "[4] Find an artist by Name\n"
+                + "[5] Update an artist.\n"
+                + "[6] Delete an artist.\n"
+                + "[0] Exit application. ");
+
 
         String choice = sc.nextLine();
-        ArtistDAO dao = new ArtistDAOImpalement();
-        String name="";
-        String lastNamn ="";
-        Integer age=0;
-
-
-
         while (true) {
 
             switch (choice) {
 
-                case "1":  // add
+                case "1":  // create
                     System.out.print("Insert first name: ");
-                    name = sc.nextLine();
+                    String name = sc.nextLine();
                     System.out.print("Insert last name: ");
-                    lastNamn =sc.nextLine();
-                    age=sc.nextInt();
-                    sc.next();
-                    Artist a = new Artist(name,lastNamn,age);
+                    String lastNamn =sc.nextLine();
+                    int age=sc.nextInt();
+                    sc.nextLine();
+                    Artist artist = new Artist(name,lastNamn,age);
+                    dao.create(artist);
                     break;
 
-                case "2": // delete
+                case "2": // read/find All
+                    dao.findAll();
                     break;
 
-                case "3":  // update
+                case "3":  // Find by ID
+                    System.out.print("Type what ID of the Artist you want to search for: ");
+                    int id =sc.nextInt();
+                    sc.nextLine();
+                    dao.findById(id);
                     break;
 
-                case "4": // show all
+                case "4": // Find by Name
+                    System.out.print("Type what name you want to search for: ");
+                    String nameSearch =sc.nextLine();
+                    dao.findByName(nameSearch);
                     break;
 
-                case "5": // findby id
+                case "5": // Update
+                    System.out.print("Type what ID of the Artist you want to update: ");
+                    int idUpdate =sc.nextInt();
+                    sc.nextLine();
+                    dao.updateArtist(idUpdate);
                     break;
 
-                case "6": // exit program.
+                case "6": // Delete.
+                    System.out.print("Type what ID of the Artist you want to DELETE: ");
+                    int idDelete =sc.nextInt();
+                    sc.nextLine();
+                    dao.deleteArtist(idDelete);
+                    break;
+
+                case"0": //Quit Program.
+                    System.out.println("Program is exiting");
                     System.exit(0);
+                        break;
+                default:
+                    System.out.println("Wrong choice. Try aging");
                     break;
-
             }
 
         }
     }
 }
-/*
-Project goal:
-The purpose of this project is for you to exercise on your newly learned topics such as SQL, JDBC and
-core java.
-Project description:
-Object type: Artist
-Attributes: id, name, lastName, age X
-You are supposed to create methods to:
-Add
-Delete
-Update
-Show All
-FindById
-Optional: FindByAge , FindByName
-Step 1: Choose your database type (JavaDb or MySql) and add to your project the appropriate driver. X
-Step 2: Create your table X
-Step 3: Create your main menu X
-Step 4: Create your methods to serve your menu
-*/

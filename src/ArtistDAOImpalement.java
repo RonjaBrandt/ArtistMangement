@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ArtistDAOImpalement implements ArtistDAO  {
 
 
     @Override
-    public void create(Artist artist) {
+    public void create(Artist artist) throws IOException, SQLException {
         try{
             insert.setString(1, artist.getName());
             insert.setString(2, artist.getLastName());
@@ -42,15 +43,15 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException ex){
             System.out.println(ex);
         }
+        Menu.menu();
     }
 
     @Override
-    public void findAll()  {
+    public void findAll() throws IOException, SQLException {
         try{
             statement = connection.createStatement();
             rs =statement.executeQuery("Select * from artistinfo");
             System.out.println("Table [ArtistInfo]");
-
             while (rs.next()){
                 System.out.println("[ID: "+rs.getString("id")+ " Name: "+rs.getString("name") + " LastName: " +
                         rs.getString("lastName") + " Age: "+ rs.getInt("age")
@@ -59,16 +60,13 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-
-        return ;
+        Menu.menu();
     }
 
     @Override@SuppressWarnings("Duplicates")
-    public void findById(int id) {
-
-        int id1 = id;
+    public void findById(int id) throws IOException, SQLException {
         try{
-            findById.setInt(1,id1);
+            findById.setInt(1,id);
             rs = findById.executeQuery();
             while (rs.next()){
                 System.out.println("[ID: "+rs.getString("id")+" Name: "+rs.getString("name")
@@ -77,27 +75,25 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException exp){
             System.out.println(exp);
         }
+        Menu.menu();
     }
 
     @Override@SuppressWarnings("Duplicates")
-    public void findByName() {
-        System.out.print("Type what name you want to search from: ");
-        String name= sc.nextLine();
+    public void findByName(String name) throws IOException, SQLException {
         try{
             findByNamn.setString(1,name);
             rs =findByNamn.executeQuery();
             while (rs.next()){
                 System.out.println("[ID: "+rs.getString("id")+ " Name: "+rs.getString("name")
-                        + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age"));
+                        + " LastName: " + rs.getString("lastName") + " Age: "+ rs.getInt("age")+"]");
             }
         }catch (SQLException ex) {
             System.out.println(ex);
         }
+        Menu.menu();
     }
-
-
     @Override
-    public void updateArtist(int id) {
+    public void updateArtist(int id) throws IOException, SQLException {
 
         System.out.print("Enter new name: ");
         String updateName = sc.nextLine();
@@ -116,13 +112,14 @@ public class ArtistDAOImpalement implements ArtistDAO  {
             System.out.println("The person with the ID "+id+" have been updated to ");
             findById(id);
 
-        }catch (SQLException ex2){
+        }catch (SQLException | IOException ex2){
             System.out.println(ex2);
         }
+        Menu.menu();
     }
 
     @Override
-    public void deleteArtist(int id) {
+    public void deleteArtist(int id) throws IOException, SQLException {
         try{
             delete.setInt(1,id);
             delete.execute();
@@ -130,5 +127,6 @@ public class ArtistDAOImpalement implements ArtistDAO  {
         }catch (SQLException ex3){
             System.out.println(ex3);
         }
+        Menu.menu();
     }
 }
